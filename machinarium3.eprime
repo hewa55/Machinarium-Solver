@@ -1,0 +1,29 @@
+$ Puzzle Machinarium
+$
+$ This puzzle is from the Computer Game Machinarium and is played on a 
+$ square n x n grid. The user puts a token on a field of the grid and tries to
+$ touch upon every single location in the grid. 
+$ There are black spots on the grid, where the token cant move to.
+$ The token cant revisit a field.
+$ The token can only move horizontally and vertically.
+$
+$ by 150001088
+
+language ESSENCE' 1.0
+
+given initial_grid: matrix indexed by [int(1..p), int(1..p)] of int(0, 1)
+
+$ maximum number of moves in a clear field
+letting n be 4
+$ number of free fields:
+letting free be n-sum(flatten(initial_grid))
+letting MAX_MOVES be domain int(0..n-1)
+$ find the positions of the token
+find moves : matrix of [int(1..p), int(1..p)] of int(0, 1)
+
+such that
+$ allowed moves change the next X coordinate into the previous plus move
+$forAll i : int(1..p) .
+$	forAll j : int(1..p) .  
+$		numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/numberMatrix[i,j]=n \/ numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j-1] = numberMatrix[i,j] +1,
+$allDiff(flatten(numberMatrix))
