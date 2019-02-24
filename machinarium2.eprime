@@ -17,12 +17,10 @@ $ maximum number of moves in a clear field
 letting n be p**2
 $ number of free fields:
 letting free be n-sum(flatten(initial_grid))
-letting MAX_MOVES be domain int(0..n-1)
 $ find the positions of the token
 find numberMatrix : matrix indexed by [int(1..p), int(1..p)] of int(0..free)
 
 such that
-$ allowed moves change the next X coordinate into the previous plus move
 $forAll i : int(1..p) .
 $	forAll j : int(1..p) .  
 $			initial_grid[i,j] = 0 -> numberMatrix[i,j]!=0 /\ 
@@ -46,6 +44,6 @@ forAll i : int(1..p) .
 		(numberMatrix[i,j+1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] < numberMatrix[i,j] -1 /\ (numberMatrix[i-1,j] = numberMatrix[i,j] -1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] -1)) \/
 		(numberMatrix[i-1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i+1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] -1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] -1)) \/
 		(numberMatrix[i+1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i-1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] -1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] -1)) \/
-		( (i=p \/ j = p \/ (i=1 /\ j=1)) /\ (numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j-1] = numberMatrix[i,j] +1))
+		((i=p \/ j = p \/ (i=1 /\ j=1)) /\ (numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j-1] = numberMatrix[i,j] +1))
 		),
 alldifferent_except(flatten(numberMatrix), 0)
