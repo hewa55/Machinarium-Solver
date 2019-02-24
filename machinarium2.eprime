@@ -46,6 +46,6 @@ forAll i : int(1..p) .
 		(numberMatrix[i,j+1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] < numberMatrix[i,j] -1 /\ (numberMatrix[i-1,j] = numberMatrix[i,j] -1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] -1)) \/
 		(numberMatrix[i-1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i+1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] -1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] -1)) \/
 		(numberMatrix[i+1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i-1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] -1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] -1)) \/
-		(((i=p /\ j = 1) \/ (i=p /\ j = p) \/ (j=p /\ j = 1) \/ (i=1 /\ j=1)) /\ (numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j-1] = numberMatrix[i,j] +1))
+		( (i=p \/ j = p \/ (i=1 /\ j=1)) /\ (numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j-1] = numberMatrix[i,j] +1))
 		),
 alldifferent_except(flatten(numberMatrix), 0)
