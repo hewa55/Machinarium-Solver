@@ -1,0 +1,51 @@
+$ Puzzle Machinarium
+$
+$ This puzzle is from the Computer Game Machinarium and is played on a 
+$ square n x n grid. The user puts a token on a field of the grid and tries to
+$ touch upon every single location in the grid. 
+$ There are black spots on the grid, where the token cant move to.
+$ The token cant revisit a field.
+$ The token can only move horizontally and vertically.
+$
+$ by 150001088
+
+language ESSENCE' 1.0
+
+given initial_grid: matrix indexed by [int(1..p), int(1..p)] of int(0, 1)
+
+$ maximum number of moves in a clear field
+letting n be p**2
+$ number of free fields:
+letting STEPS be n-sum(flatten(initial_grid))
+letting initial_array = flatten(initial_grid)
+$ find the positions of the token
+find numberMatrix : matrix indexed by [int(1..STEPS)] of int(0..n)
+find direction : matrix indexed by [int(1..STEPS-1)] of int(0,1)
+such that
+
+forAll i : int(1..STEPS-1) . 
+	numberMatrix[i+1] = numberMatrix[i]+p \/ numberMatrix[i+1] = numberMatrix[i]-p \/ numberMatrix[i+1] = numberMatrix[i]+1 \/ numberMatrix[i+1] = numberMatrix[i]-1,
+
+$ cant jump in row and column at the end of a row
+forAll i : int(1..STEPS-1) . 
+	numberMatrix[i]%p=0 -> (numberMatrix[i+1] - numberMatrix[i])!=1,
+forAll i : int(1..STEPS-1) . 
+	numberMatrix[i]%p=1 -> (numberMatrix[i+1] - numberMatrix[i])!=-1,
+$ avoid obstacles
+forAll i : int(1..STEPS) . 
+	initial_array[numberMatrix[i]] = 1 <-> numberMatrix[i]=0,
+	
+$ adjust direction such that it moves horizontally (1) or vertically (0)
+forAll i : int(1..STEPS-1) . 
+	|numberMatrix[i+1]- numberMatrix[i]|=p -> direction[i] = 0,
+forAll i : int(1..STEPS-1) . 
+	|numberMatrix[i+1]- numberMatrix[i]|=1 -> direction[i] = 1,
+$ a change in direction implies an obstacle ahead (1 in initial array)
+$ positive change means horizontal to 
+forAll i : int(2..STEPS-1) . 
+	direction[i]-direction[i-1] = -1 -> initial_array[numberMatrix[i]+1]=1 \/ initial_array[numberMatrix[i]-1]=1 \/ numberMatrix[i]%p=0 \/ (numberMatrix[i]-1)%p=0,
+forAll i : int(2..STEPS-1) . 
+	direction[i]-direction[i-1] = 1 -> initial_array[numberMatrix[i]+p]=1 \/ initial_array[numberMatrix[i]-p]=1 \/ numberMatrix[i]+p>n \/ numberMatrix[i]-p<1,
+
+$ no double visits
+alldifferent_except(numberMatrix,0)                                                                    
