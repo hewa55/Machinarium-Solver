@@ -23,53 +23,32 @@ find numberMatrix : matrix indexed by [int(1..p), int(1..p)] of int(0..free)
 such that
 forAll i : int(1..p) .
 	forAll j : int(1..p) .  
-			initial_grid[i,j] = 0 -> numberMatrix[i,j]!=0 /\ 
-			(numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/ 
-			numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/ 
-			numberMatrix[i,j]=free \/ 
-			numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ 
-			numberMatrix[i,j-1] = numberMatrix[i,j] +1),
+		initial_grid[i,j] = 0 -> numberMatrix[i,j]!=0 /\ 
+		(numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/ 
+		numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/ 
+		numberMatrix[i,j]=free \/ 
+		numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/
+		numberMatrix[i,j-1] = numberMatrix[i,j] +1),
+
 forAll i : int(1..p) .
 	forAll j : int(1..p) .  
 		initial_grid[i,j] = 1 -> numberMatrix[i,j]=0,
-$forAll i : int(1..p) .
-$	forAll j : int(1..p) .  
-$		initial_grid[i,j] = 0 -> numberMatrix[i,j] != 0 /\
-$		(
-$		(numberMatrix[i+1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i-1,j] = numberMatrix[i,j] - 1 ) \/ 
-$		(numberMatrix[i,j+1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] = numberMatrix[i,j] -1 ) \/
-$		numberMatrix[i,j]=free \/ 
-$		(numberMatrix[i-1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i+1,j] = numberMatrix[i,j] -1 ) \/
-$		(numberMatrix[i,j-1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j+1] = numberMatrix[i,j] -1) \/
-$		(numberMatrix[i,j-1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j+1] < numberMatrix[i,j] -1 /\ (numberMatrix[i-1,j] = numberMatrix[i,j] -1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] -1)) \/
-$		(numberMatrix[i,j+1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] < numberMatrix[i,j] -1 /\ (numberMatrix[i-1,j] = numberMatrix[i,j] -1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] -1)) \/
-$		(numberMatrix[i-1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i+1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] -1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] -1)) \/
-$		(numberMatrix[i+1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i-1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] -1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] -1)) \/
-$		((i=p \/ j = p \/ (i=1 /\ j=1)) /\ (numberMatrix[i+1,j] = numberMatrix[i,j] +1 \/numberMatrix[i,j+1] = numberMatrix[i,j] +1 \/numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i,j-1] = numberMatrix[i,j] +1))),
 
 forAll i : int(1..p) . 
 	forAll j : int(1..p) .
+		$ either be in a line with a +1 and -1
 		(numberMatrix[i+1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i-1,j] = numberMatrix[i,j] -1) \/
 		(numberMatrix[i-1,j] = numberMatrix[i,j] +1 /\ numberMatrix[i+1,j] = numberMatrix[i,j] -1) \/
- 		(numberMatrix[i,j+1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] = numberMatrix[i,j] -1) \/ 
+		(numberMatrix[i,j+1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] = numberMatrix[i,j] -1) \/ 
 		(numberMatrix[i,j-1] = numberMatrix[i,j] +1 /\ numberMatrix[i,j+1] = numberMatrix[i,j] -1) \/ 
-
-		(numberMatrix[i,j-1] = numberMatrix[i,j] -1 /\ numberMatrix[i,j+1] < numberMatrix[i,j] -1 /\ (numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] +1)) \/
-		(numberMatrix[i,j+1] = numberMatrix[i,j] -1 /\ numberMatrix[i,j-1] < numberMatrix[i,j] -1 /\ (numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] +1)) \/
-		(numberMatrix[i-1,j] = numberMatrix[i,j] -1 /\ numberMatrix[i+1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] +1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] +1)) \/
-		(numberMatrix[i+1,j] = numberMatrix[i,j] -1 /\ numberMatrix[i-1,j] < numberMatrix[i,j] -1 /\ (numberMatrix[i,j-1] = numberMatrix[i,j] +1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] +1)) \/
-
-		numberMatrix[i,j]=free \/ numberMatrix[i,j]=1 \/ (i=p /\ j=p)  \/ (i=1 /\ j=p)  \/ (i=p /\ j=1) \/ (i=1 /\ j=1),
-
-
-
-$forAll i : int(1..p) .
-$	forAll j : int(1..p) .
-$		!(
-$		(numberMatrix[i+1,j] > numberMatrix[i,j] +1 /\ numberMatrix[i-1,j] = numberMatrix[i,j] -1)/\
-$		(numberMatrix[i-1,j] > numberMatrix[i,j] +1 /\ numberMatrix[i+1,j] = numberMatrix[i,j] -1)/\
-$		(numberMatrix[i,j-1] > numberMatrix[i,j] +1 /\ numberMatrix[i,j+1] = numberMatrix[i,j] -1)/\
-$		(numberMatrix[i,j+1] > numberMatrix[i,j] +1 /\ numberMatrix[i,j-1] = numberMatrix[i,j] -1)
-$		),
-$goal: define that I should not have a number more than one bigger when the previous is one smaller
+		$ or if a much smaller number is ahead but a -1 behind, a +1 should be on one of the sides
+		((numberMatrix[i,j-1] = numberMatrix[i,j] -1 /\ numberMatrix[i,j+1] < numberMatrix[i,j] -1) <-> (numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] +1)) \/
+		((numberMatrix[i,j+1] = numberMatrix[i,j] -1 /\ numberMatrix[i,j-1] < numberMatrix[i,j] -1) <-> (numberMatrix[i-1,j] = numberMatrix[i,j] +1 \/ numberMatrix[i+1,j] = numberMatrix[i,j] +1)) \/
+		((numberMatrix[i-1,j] = numberMatrix[i,j] -1 /\ numberMatrix[i+1,j] < numberMatrix[i,j] -1) <-> (numberMatrix[i,j-1] = numberMatrix[i,j] +1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] +1)) \/
+		((numberMatrix[i+1,j] = numberMatrix[i,j] -1 /\ numberMatrix[i-1,j] < numberMatrix[i,j] -1) <-> (numberMatrix[i,j-1] = numberMatrix[i,j] +1 \/ numberMatrix[i,j+1] = numberMatrix[i,j] +1)) \/
+		$ this doesnt apply to: the last number (cant have a +1), the first number (cant have a -1) or the corners (no number to measure ahead)
+		numberMatrix[i,j]=free \/ 
+$not needed? pretty sure I do, the cases I tested had the 1 in a corner	numberMatrix[i,j]=1 \/ 
+		(i=p /\ j=p)  \/ (i=1 /\ j=p)  \/ (i=p /\ j=1) \/ (i=1 /\ j=1),
+$ condition is fine
 alldifferent_except(flatten(numberMatrix), 0)
