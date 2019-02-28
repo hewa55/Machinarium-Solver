@@ -21,6 +21,7 @@ letting initial_array = flatten(initial_grid)
 $ find the positions of the token
 find numberMatrix : matrix indexed by [int(1..STEPS)] of int(0..n)
 find direction : matrix indexed by [int(1..STEPS-1)] of int(0,1)
+find movement : matrix indexed by [int(1..STEPS-1)] of int(-1,1)
 such that
 
 forAll i : int(1..STEPS-1) . 
@@ -31,7 +32,7 @@ forAll i : int(1..STEPS-1) .
 	numberMatrix[i]%p=0 -> (numberMatrix[i+1] - numberMatrix[i])!=1,
 forAll i : int(1..STEPS-1) . 
 	numberMatrix[i]%p=1 -> (numberMatrix[i+1] - numberMatrix[i])!=-1,
-$ avoid obstacles
+
 forAll i : int(1..STEPS) . 
 	initial_array[numberMatrix[i]] = 1 <-> numberMatrix[i]=0,
 	
@@ -40,12 +41,24 @@ forAll i : int(1..STEPS-1) .
 	|numberMatrix[i+1]- numberMatrix[i]|=p -> direction[i] = 0,
 forAll i : int(1..STEPS-1) . 
 	|numberMatrix[i+1]- numberMatrix[i]|=1 -> direction[i] = 1,
-$ a change in direction implies an obstacle ahead (1 in initial array)
-$ positive change means horizontal to 
+
+$ with direction and movement, I can tell which field is ahead
+forAll i : int(1..STEPS-1) . 
+	numberMatrix[i+1]- numberMatrix[i]>0 -> movement[i] = 1,
+forAll i : int(1..STEPS-1) . 
+	numberMatrix[i+1]- numberMatrix[i]<0 -> movement[i] = -1,
+$ a change in direction implies an obstacle ahead (1 in initial array) or that the field has been visited
 forAll i : int(2..STEPS-1) . 
-	direction[i]-direction[i-1] = -1 -> initial_array[numberMatrix[i]+1]=1 \/ initial_array[numberMatrix[i]-1]=1 \/ numberMatrix[i]%p=0 \/ (numberMatrix[i]-1)%p=0,
+	direction[i]-direction[i-1] = -1 -> initial_array[numberMatrix[i]+movement[i-1]*1]=1 \/ numberMatrix[i]%p=0 \/ (numberMatrix[i]-1)%p=0 \/ (exists j : int(1..i) . numberMatrix[j]= numberMatrix[i]+movement[i-1]*1), 
+
 forAll i : int(2..STEPS-1) . 
-	direction[i]-direction[i-1] = 1 -> initial_array[numberMatrix[i]+p]=1 \/ initial_array[numberMatrix[i]-p]=1 \/ numberMatrix[i]+p>n \/ numberMatrix[i]-p<1,
+	direction[i]-direction[i-1] = 1 -> initial_array[numberMatrix[i]+movement[i-1]*p]=1 \/ numberMatrix[i]+p>n \/ numberMatrix[i]-p<1 \/ (exists j : int(1..i) . numberMatrix[j]= numberMatrix[i]+movement[i-1]*p),
+
+$ if the field ahead is already in the number matrix at a previous spot, a change of direction is okay
+
+
+$ cant have a change of direction, if the field, I would have landed on is visited later,
+$ essentially I say, that for a field numberMatrix[i], for which direction[i]-direction[i-1] = -1, !exist j:int(i..STEPS) numberMatrix[j]=numberMatrix[i]+1 
 
 $ no double visits
 alldifferent_except(numberMatrix,0)                                                                    
